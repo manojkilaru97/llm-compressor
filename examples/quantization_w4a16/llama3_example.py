@@ -50,7 +50,18 @@ def main() -> None:
         help="Optional local dataset path (json/jsonl/parquet). If set, avoids downloading from HuggingFace Hub.",
     )
 
-    parser.add_argument("--num-calibration-samples", type=int, default=512)
+    parser.add_argument(
+        "--num-calibration-samples",
+        type=int,
+        default=128,
+        help="Number of calibration samples to use (GPTQ only).",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=8,
+        help="Calibration batch size (GPTQ only). Increasing this can speed up calibration.",
+    )
     parser.add_argument("--max-seq-length", type=int, default=2048)
 
     parser.add_argument("--max-new-tokens", type=int, default=64)
@@ -124,6 +135,7 @@ def main() -> None:
             recipe=recipe,
             max_seq_length=args.max_seq_length,
             num_calibration_samples=args.num_calibration_samples,
+            batch_size=args.batch_size,
         )
         default_suffix = "W4A16-G128"
     else:
