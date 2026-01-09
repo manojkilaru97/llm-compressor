@@ -5,6 +5,7 @@ This module provides functions for tracking device memory usage, loss, and runti
 during module compression (optimization). Supports both NVIDIA and AMD GPU monitoring
 """
 
+import os
 import time
 from typing import Iterable, Optional
 
@@ -40,6 +41,20 @@ class CompressionLogger:
         return self
 
     def __exit__(self, _exc_type, _exc_val, _exc_tb):
+        # Allow users to silence the noisy per-module metrics logs (time/error/GPU usage/size)
+        # while still keeping higher-level INFO logs like "Quantizing <layer> ...".
+        #
+        # Usage:
+        #   LLM_COMPRESSOR_METRICS_DISABLED=true python ...
+        if os.getenv("LLM_COMPRESSOR_METRICS_DISABLED", "").lower() in (
+            "1",
+            "true",
+            "yes",
+            "y",
+            "on",
+        ):
+            return
+
         stop_tick = time.time()
 
         patch = logger.patch(lambda r: r.update(function=(self._name or "compress")))
