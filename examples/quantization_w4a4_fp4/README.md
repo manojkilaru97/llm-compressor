@@ -26,6 +26,14 @@ The resulting model `Meta-Llama-3-8B-Instruct-NVFP4` is ready to be loaded into 
 Note: if running inference on a machine that is < SM100, vLLM will not run activation
 quantization, only weight-only quantization.
 
+### Local checkpoints (example: GLM-4.7)
+
+If you have a local checkpoint (e.g. `/home/scratch.mkilaru_coreai/GLM-4.7`), you can run:
+
+```bash
+python3 glm47_nvfp4.py --model-path /home/scratch.mkilaru_coreai/GLM-4.7 --save-dir /home/scratch.mkilaru_coreai/GLM-4.7-NVFP4
+```
+
 ## Code Walkthough
 
 Now, we will step though the code in the example:
